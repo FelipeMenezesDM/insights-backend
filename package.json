@@ -4,7 +4,8 @@
   "description": "API para aplicação de gerenciamento de cards com conteúdo esportivo.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
