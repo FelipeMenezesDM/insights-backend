@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://root:mongo@localhost:9000', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true 
+  useCreateIndex: true,
+  useFindAndModify: false
 });
 
 mongoose.set('toJSON', {
