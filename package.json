@@ -1,0 +1,23 @@
+{
+  "name": "insights-backend",
+  "version": "1.0.0",
+  "description": "API para aplicação de gerenciamento de cards com conteúdo esportivo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felipemenezesdm/insights-backend.git"
+  },
+  "author": "Felipe Menezes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/felipemenezesdm/insights-backend/issues"
+  },
+  "homepage": "https://github.com/felipemenezesdm/insights-backend#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  }
+}
