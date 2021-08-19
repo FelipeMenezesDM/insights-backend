@@ -2,7 +2,7 @@
   "name": "insights-backend",
   "version": "1.0.0",
   "description": "API para aplicação de gerenciamento de cards com conteúdo esportivo.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js"
@@ -20,5 +20,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "mongoose": "^5.13.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   }
 }
