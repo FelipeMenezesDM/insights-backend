@@ -2,6 +2,7 @@ const express = require('express');
 const Insight = require('../models/Insight');
 const Tag = require('../models/Tag');
 const router = express.Router();
+const regsPerPage = 5;
 const insertTags = async tags => {
   const newTags= [];
 
@@ -44,6 +45,28 @@ router.get('/get', async (req, res) => {
     return res.send({ insight });
   }catch(err){
     return res.status(400).send({ error: 'Falha na leitura do card.' });
+  }
+});
+
+router.get('/search', async (req, res) => {
+  try{
+    await Insight.find({
+      texto: {$regex: new RegExp(req.body.s), $options: 'i'}
+    }, (err, insight) => {
+      return res.send({ insight });
+    }).sort({data_criacao: -1}).limit(regsPerPage);
+  }catch(err){
+    return res.status(400).send({ error: 'Falha na listagem de cards.' });
+  }
+});
+
+router.get('/list', async (req, res) => {
+  try{
+    await Insight.find({}, (err, insight) => {
+      return res.send({ insight });
+    }).sort({data_criacao: -1}).limit(regsPerPage);
+  }catch(err){
+    return res.status(400).send({ error: 'Falha na listagem de cards.' });
   }
 });
 

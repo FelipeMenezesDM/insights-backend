@@ -31,7 +31,7 @@ router.get('/get', async (req, res) => {
 
 router.get('/list', async (req, res) => {
   try{
-    const tag = await Tag.find({}, (err, tags) => {
+    await Tag.find({}, (err, tags) => {
       return res.send({ tags });
     });
   }catch(err){
