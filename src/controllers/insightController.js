@@ -4,6 +4,9 @@ const Insight = require('../models/Insight');
 const Tag = require('../models/Tag');
 const router = express();
 const regsPerPage = 10;
+const apiSchema = require('../api.schema.json');
+const OpenApiValidator = require('express-openapi-validator');
+const swaggerUi = require('swagger-ui-express');
 const insertTags = async tags => {
   const newTags= [];
 
@@ -21,6 +24,16 @@ const insertTags = async tags => {
 
   return newTags;
 };
+
+router.use('/docs', swaggerUi.serve);
+router.get('/docs', swaggerUi.setup(apiSchema));
+router.use(
+  OpenApiValidator.middleware({
+    apiSpec: apiSchema,
+    validateRequests: true,
+    validateResponses: true
+  })
+);
 
 router.use(cors())
 
@@ -42,7 +55,7 @@ router.post('/post', async (req, res) => {
       return res.send({insight});
     }
   }catch(err){
-    return res.status(400).send({ error: 'Falha de inserção do card.' });
+    return res.status(400).send({ error: 'Falha de inserção do insight.' });
   }
 });
 
