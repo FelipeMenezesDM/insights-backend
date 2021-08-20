@@ -3,7 +3,7 @@ const cors = require('cors');
 const Insight = require('../models/Insight');
 const Tag = require('../models/Tag');
 const router = express();
-const regsPerPage = 5;
+const regsPerPage = 10;
 const insertTags = async tags => {
   const newTags= [];
 
@@ -105,11 +105,11 @@ router.put('/put', async (req, res) => {
 
 router.delete('/delete', async (req, res) => {
   try{
-    if(!req.body.id) {
+    if(!req.query.id) {
       return res.status(400).send({ error: 'ID do card não informado.' });
     }
 
-    const insight = await Insight.findByIdAndDelete(req.body.id);
+    const insight = await Insight.findByIdAndDelete(req.query.id);
 
     return res.send({ insight });
   }catch(err){
