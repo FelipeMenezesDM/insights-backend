@@ -34,15 +34,12 @@ router.post('/post', async (req, res) => {
     const insight = await Insight.create(req.body);
 
     if(insight.tags && insight.tags.length) {
-      console.log('--------------------------------');
-      console.log(insight.tags);
       insight.tags = await insertTags(insight.tags);
       insight.save((err, result) => {
         return res.send({ result });
       });
     }
   }catch(err){
-    console.log(err);
     return res.status(400).send({ error: 'Falha de inserção do card.' });
   }
 });
