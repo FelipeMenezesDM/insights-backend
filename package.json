@@ -20,7 +20,9 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.13.7"
+    "express-openapi-validator": "^4.13.0",
+    "mongoose": "^5.13.7",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
