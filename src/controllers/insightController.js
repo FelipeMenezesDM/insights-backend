@@ -38,6 +38,8 @@ router.post('/post', async (req, res) => {
       insight.save((err, result) => {
         return res.send({ result });
       });
+    }else{
+      return res.send({insight});
     }
   }catch(err){
     return res.status(400).send({ error: 'Falha de inserção do card.' });
