@@ -1,6 +1,14 @@
 const express = require('express');
+const cors = require('cors');
 const Tag = require('../models/Tag');
-const router = express.Router();
+const router = express();
+
+router.use(cors())
+
+router.use((req, res, next) => {
+  router.use(cors());
+  next();
+});
 
 router.post('/post', async (req, res) => {
   try{
@@ -36,6 +44,18 @@ router.get('/list', async (req, res) => {
     });
   }catch(err){
     return res.status(400).send({ error: 'Falha na listagem de tags.' });
+  }
+});
+
+router.get('/search', async (req, res) => {
+  try{
+    await Tag.find({
+      name: {$regex: new RegExp(req.body.s), $options: 'i'}
+    }, (err, tag) => {
+      return res.send({ tag });
+    });
+  }catch(err){
+    return res.status(400).send({ error: 'Falha na listagem de cards.' });
   }
 });
 

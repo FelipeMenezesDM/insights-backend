@@ -1,7 +1,8 @@
 const express = require('express');
+const cors = require('cors');
 const Insight = require('../models/Insight');
 const Tag = require('../models/Tag');
-const router = express.Router();
+const router = express();
 const regsPerPage = 5;
 const insertTags = async tags => {
   const newTags= [];
@@ -21,15 +22,27 @@ const insertTags = async tags => {
   return newTags;
 };
 
+router.use(cors())
+
+router.use((req, res, next) => {
+  router.use(cors());
+  next();
+});
+
 router.post('/post', async (req, res) => {
   try{
     const insight = await Insight.create(req.body);
 
-    insight.tags = await insertTags(insight.tags);
-    insight.save((err, result) => {
-      return res.send({ result });
-    });
+    if(insight.tags && insight.tags.length) {
+      console.log('--------------------------------');
+      console.log(insight.tags);
+      insight.tags = await insertTags(insight.tags);
+      insight.save((err, result) => {
+        return res.send({ result });
+      });
+    }
   }catch(err){
+    console.log(err);
     return res.status(400).send({ error: 'Falha de inserção do card.' });
   }
 });
