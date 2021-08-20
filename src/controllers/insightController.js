@@ -48,11 +48,11 @@ router.post('/post', async (req, res) => {
 
 router.get('/get', async (req, res) => {
   try{
-    if(!req.body.id) {
+    if(!req.query.id) {
       return res.status(400).send({ error: 'ID do card não informado.' });
     }
 
-    const insight = await Insight.findById(req.body.id);
+    const insight = await Insight.findById(req.query.id);
 
     return res.send({ insight });
   }catch(err){
@@ -63,7 +63,7 @@ router.get('/get', async (req, res) => {
 router.get('/search', async (req, res) => {
   try{
     await Insight.find({
-      texto: {$regex: new RegExp(req.body.s), $options: 'i'}
+      texto: {$regex: new RegExp(req.query.s), $options: 'i'}
     }, (err, insight) => {
       return res.send({ insight });
     }).sort({data_criacao: -1}).limit(regsPerPage);
@@ -90,10 +90,14 @@ router.put('/put', async (req, res) => {
 
     const insight = await Insight.findByIdAndUpdate(req.body.id, req.body, {new: true});
 
-    insight.tags = await insertTags(insight.tags);
-    insight.save((err, result) => {
-      return res.send({ result });
-    });
+    if(insight.tags && insight.tags.length) {
+      insight.tags = await insertTags(insight.tags);
+      insight.save((err, result) => {
+        return res.send({ result });
+      });
+    }else{
+      return res.send({insight});
+    }
   }catch(err){
     return res.status(400).send({ error: 'Falha de atualização do card.' });
   }

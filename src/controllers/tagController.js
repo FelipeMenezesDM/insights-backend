@@ -25,11 +25,11 @@ router.post('/post', async (req, res) => {
 
 router.get('/get', async (req, res) => {
   try{
-    if(!req.body.name) {
+    if(!req.query.name) {
       return res.status(400).send({ error: 'Nome da tag não informado.' });
     }
 
-    const tag = await Tag.findOne({name: req.body.name});
+    const tag = await Tag.findOne({name: req.query.name});
 
     return res.send({ tag });
   }catch(err){
@@ -50,7 +50,7 @@ router.get('/list', async (req, res) => {
 router.get('/search', async (req, res) => {
   try{
     await Tag.find({
-      name: {$regex: new RegExp(req.body.s), $options: 'i'}
+      name: {$regex: new RegExp(req.query.s), $options: 'i'}
     }, (err, tag) => {
       return res.send({ tag });
     });
