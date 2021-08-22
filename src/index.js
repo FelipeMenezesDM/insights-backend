@@ -17,7 +17,6 @@ app.use((req, res, next) => {
 app.use('/docs', swaggerUi.serve);
 app.get('/docs', swaggerUi.setup(apiSchema));
 
-require('./controllers/insightController')(app);
-require('./controllers/tagController')(app);
+require('./controllers')(app);
 
 app.listen(3000);
