@@ -1,6 +1,6 @@
 const swagger = require('swagger-autogen')();
 const output = 'src/docs/api.schema.json';
-const routes = ['src/controllers/insightController.js', 'src/controllers/tagController.js',];
+const routes = ['src/controllers/index.js',];
 
 const doc = {
   info: {
