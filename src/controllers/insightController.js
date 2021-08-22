@@ -41,26 +41,27 @@ router.post('/post', async (req, res) => {
 router.get('/get', async (req, res) => {
   try{
     if(!req.query.id) {
-      return res.status(400).send({ error: 'ID do card não informado.' });
+      return res.status(400).send({ error: 'ID do insight não informado.' });
     }
 
     const insight = await Insight.findById(req.query.id);
 
     return res.send({ insight });
   }catch(err){
-    return res.status(400).send({ error: 'Falha na leitura do card.' });
+    return res.status(400).send({ error: 'Falha na leitura do insight.' });
   }
 });
 
 router.get('/search', async (req, res) => {
   try{
-    await Insight.find({
-      texto: {$regex: new RegExp(req.query.s), $options: 'i'}
-    }, (err, insight) => {
+    await Insight.find({ $or: [
+      {texto: {$regex: new RegExp(req.query.s), $options: 'i'}},
+      {'tags.name': req.query.s}
+    ]}, (err, insight) => {
       return res.send({ insight });
     }).sort({data_criacao: -1}).limit(regsPerPage);
   }catch(err){
-    return res.status(400).send({ error: 'Falha na listagem de cards.' });
+    return res.status(400).send({ error: 'Falha na listagem de insights.' });
   }
 });
 
@@ -70,14 +71,14 @@ router.get('/list', async (req, res) => {
       return res.send({ insight });
     }).sort({data_criacao: -1}).limit(regsPerPage);
   }catch(err){
-    return res.status(400).send({ error: 'Falha na listagem de cards.' });
+    return res.status(400).send({ error: 'Falha na listagem de insights.' });
   }
 });
 
 router.put('/put', async (req, res) => {
   try{
     if(!req.body.id) {
-      return res.status(400).send({ error: 'ID do card não informado.' });
+      return res.status(400).send({ error: 'ID do insight não informado.' });
     }
 
     const insight = await Insight.findByIdAndUpdate(req.body.id, req.body, {new: true});
@@ -91,21 +92,21 @@ router.put('/put', async (req, res) => {
       return res.send({insight});
     }
   }catch(err){
-    return res.status(400).send({ error: 'Falha de atualização do card.' });
+    return res.status(400).send({ error: 'Falha de atualização do insight.' });
   }
 });
 
 router.delete('/delete', async (req, res) => {
   try{
     if(!req.query.id) {
-      return res.status(400).send({ error: 'ID do card não informado.' });
+      return res.status(400).send({ error: 'ID do insight não informado.' });
     }
 
     const insight = await Insight.findByIdAndDelete(req.query.id);
 
     return res.send({ insight });
   }catch(err){
-    return res.status(400).send({ error: 'Falha na remoção do card.' });
+    return res.status(400).send({ error: 'Falha na remoção do insight.' });
   }
 });
 

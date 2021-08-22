@@ -72,11 +72,11 @@ router.put('/put', async (req, res) => {
 
 router.delete('/delete', async (req, res) => {
   try{
-    if(!req.body.name) {
+    if(!req.query.name) {
       return res.status(400).send({ error: 'Nome da tag não informado.' });
     }
 
-    const tag = await Tag.findOneAndDelete({name: req.body.name});
+    const tag = await Tag.findOneAndDelete({name: req.query.name});
 
     return res.send({ tag });
   }catch(err){
