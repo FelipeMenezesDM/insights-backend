@@ -1,14 +1,5 @@
-const express = require('express');
-const cors = require('cors');
 const Tag = require('../models/Tag');
-const router = express();
-
-router.use(cors())
-
-router.use((req, res, next) => {
-  router.use(cors());
-  next();
-});
+const router = require('express').Router();
 
 router.post('/post', async (req, res) => {
   try{
