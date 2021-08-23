@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const swaggerUi = require('swagger-ui-express');
-const apiSchema = require('./docs/api.schema.json');
+const apiSchema = require('./swagger');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
