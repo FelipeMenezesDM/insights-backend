@@ -1,7 +1,7 @@
 const Insight = require('../models/Insight');
 const Tag = require('../models/Tag');
 const router = require('express').Router();
-const regsPerPage = 2;
+const regsPerPage = 10;
 
 const insertTags = async tags => {
   const newTags= [];
@@ -59,7 +59,7 @@ router.get('/search', async (req, res) => {
     await Insight.find({ $or: [
       {texto: {$regex: new RegExp(req.query.s), $options: 'i'}},
       {'tags.name': req.query.s}
-    ]}).limit(regsPerPage).skip(page * regsPerPage).sort({data_criacao: 'asc'}).exec((err, insight) => {
+    ]}).limit(regsPerPage).skip(page * regsPerPage).sort({data_criacao: 'desc'}).exec((err, insight) => {
       return res.send({ insight });
     });
   }catch(err){
@@ -71,7 +71,7 @@ router.get('/list', async (req, res) => {
   try{
     const page = req.query.page || 0;
 
-    await Insight.find({}).limit(regsPerPage).skip(page * regsPerPage).sort({data_criacao: 'asc'}).exec((err, insight) => {
+    await Insight.find({}).limit(regsPerPage).skip(page * regsPerPage).sort({data_criacao: 'desc'}).exec((err, insight) => {
       return res.send({ insight });
     });
   }catch(err){
