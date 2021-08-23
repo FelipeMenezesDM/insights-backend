@@ -75,7 +75,6 @@ router.get('/list', async (req, res) => {
       return res.send({ insight });
     });
   }catch(err){
-    console.log(err);
     return res.status(400).send({ error: 'Falha na listagem de insights.' });
   }
 });
