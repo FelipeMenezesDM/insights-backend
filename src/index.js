@@ -17,6 +17,6 @@ app.use((req, res, next) => {
 app.use('/docs', swaggerUi.serve);
 app.get('/docs', swaggerUi.setup(apiSchema));
 
-require('./controllers')(app);
+require('./routes')(app);
 
 app.listen(3000);
