@@ -1,7 +1,7 @@
 const Insight = require('../models/Insight');
 const Tag = require('../models/Tag');
 const router = require('express').Router();
-const regsPerPage = 10;
+const regsPerPage = 2;
 
 const insertTags = async tags => {
   const newTags= [];
@@ -54,12 +54,14 @@ router.get('/get', async (req, res) => {
 
 router.get('/search', async (req, res) => {
   try{
+    const page = req.query.page || 0;
+
     await Insight.find({ $or: [
       {texto: {$regex: new RegExp(req.query.s), $options: 'i'}},
       {'tags.name': req.query.s}
-    ]}, (err, insight) => {
+    ]}).limit(regsPerPage).skip(page * regsPerPage).sort({data_criacao: 'asc'}).exec((err, insight) => {
       return res.send({ insight });
-    }).sort({data_criacao: -1}).limit(regsPerPage);
+    });
   }catch(err){
     return res.status(400).send({ error: 'Falha na listagem de insights.' });
   }
@@ -67,10 +69,13 @@ router.get('/search', async (req, res) => {
 
 router.get('/list', async (req, res) => {
   try{
-    await Insight.find({}, (err, insight) => {
+    const page = req.query.page || 0;
+
+    await Insight.find({}).limit(regsPerPage).skip(page * regsPerPage).sort({data_criacao: 'asc'}).exec((err, insight) => {
       return res.send({ insight });
-    }).sort({data_criacao: -1}).limit(regsPerPage);
+    });
   }catch(err){
+    console.log(err);
     return res.status(400).send({ error: 'Falha na listagem de insights.' });
   }
 });
