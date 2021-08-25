@@ -3,6 +3,9 @@ const cors = require('cors');
 const app = express();
 const swaggerUi = require('swagger-ui-express');
 const apiSchema = require('./swagger');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

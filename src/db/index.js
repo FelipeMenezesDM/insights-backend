@@ -1,7 +1,6 @@
-const env = require('../../environment/init');
 const mongoose = require('mongoose');
 
-mongoose.connect(env.DATABASE_URL, {
+mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
