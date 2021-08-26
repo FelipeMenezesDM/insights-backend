@@ -5,6 +5,8 @@ mongoose.connect(process.env.DATABASE_URL, {
   useUnifiedTopology: true,
   useCreateIndex: true,
   useFindAndModify: false
+}).catch(reason => {
+  console.log('Unable to connect to the mongodb instance. Error: ', reason);
 });
 
 mongoose.set('toJSON', {
