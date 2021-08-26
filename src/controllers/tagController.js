@@ -1,16 +1,6 @@
-const express = require('express');
-const cors = require('cors');
 const Tag = require('../models/Tag');
-const router = express();
 
-router.use(cors())
-
-router.use((req, res, next) => {
-  router.use(cors());
-  next();
-});
-
-router.post('/post', async (req, res) => {
+exports.postTag = async (req, res) => {
   try{
     const condition = {name: req.body.name};
     const options = {new: true, upsert: true, setDefaultsOnInsert: true};
@@ -19,35 +9,35 @@ router.post('/post', async (req, res) => {
 
     return res.send({ tag });
   }catch(err){
-    return res.status(400).send({ error: 'Falha de inserção da tag.' });
+    return res.status(400).send({ error: 'Falha de inserção da categoria.' });
   }
-});
+};
 
-router.get('/get', async (req, res) => {
+exports.getTag = async (req, res) => {
   try{
     if(!req.query.name) {
-      return res.status(400).send({ error: 'Nome da tag não informado.' });
+      return res.status(400).send({ error: 'Nome da categoria não informado.' });
     }
 
     const tag = await Tag.findOne({name: req.query.name});
 
     return res.send({ tag });
   }catch(err){
-    return res.status(400).send({ error: 'Falha na leitura do card.' });
+    return res.status(400).send({ error: 'Falha na leitura da categoria.' });
   }
-});
+};
 
-router.get('/list', async (req, res) => {
+exports.listTag = async (req, res) => {
   try{
     await Tag.find({}, (err, tags) => {
       return res.send({ tags });
     });
   }catch(err){
-    return res.status(400).send({ error: 'Falha na listagem de tags.' });
+    return res.status(400).send({ error: 'Falha na listagem de categorias.' });
   }
-});
+};
 
-router.get('/search', async (req, res) => {
+exports.searchTag = async (req, res) => {
   try{
     await Tag.find({
       name: {$regex: new RegExp(req.query.s), $options: 'i'}
@@ -55,42 +45,40 @@ router.get('/search', async (req, res) => {
       return res.send({ tag });
     });
   }catch(err){
-    return res.status(400).send({ error: 'Falha na listagem de cards.' });
+    return res.status(400).send({ error: 'Falha na listagem de categorias.' });
   }
-});
+};
 
-router.put('/put', async (req, res) => {
+exports.putTag = async (req, res) => {
   try{
     if(!req.body.id) {
-      return res.status(400).send({ error: 'ID da tag não informado.' });
+      return res.status(400).send({ error: 'ID da categoria não informado.' });
     }
 
     const tagExists = await Tag.findOne({name: req.body.name});
 
     if(tagExists && tagExists.id != req.body.id) {
-      return res.status(400).send({error: 'O novo nome informado para a tag já está em uso.'});
+      return res.status(400).send({error: 'O novo nome informado para a categoria já está em uso.'});
     }
 
     const tag = await Tag.findByIdAndUpdate(req.body.id, req.body, {new: true});
 
     return res.send({ tag });
   }catch(err){
-    return res.status(400).send({ error: 'Falha na atualização da tag.' });
+    return res.status(400).send({ error: 'Falha na atualização da categoria.' });
   }
-});
+};
 
-router.delete('/delete', async (req, res) => {
+exports.deleteTag = async (req, res) => {
   try{
-    if(!req.body.name) {
-      return res.status(400).send({ error: 'Nome da tag não informado.' });
+    if(!req.query.name) {
+      return res.status(400).send({ error: 'Nome da categoria não informado.' });
     }
 
-    const tag = await Tag.findOneAndDelete({name: req.body.name});
+    const tag = await Tag.findOneAndDelete({name: req.query.name});
 
     return res.send({ tag });
   }catch(err){
-    return res.status(400).send({ error: 'Falha na remoção da tag.' });
+    return res.status(400).send({ error: 'Falha na remoção da categoria.' });
   }
-});
-
-module.exports = app => app.use('/tag', router);
+};

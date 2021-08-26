@@ -1,9 +1,7 @@
-const express = require('express');
-const cors = require('cors');
 const Insight = require('../models/Insight');
 const Tag = require('../models/Tag');
-const router = express();
 const regsPerPage = 10;
+
 const insertTags = async tags => {
   const newTags= [];
 
@@ -22,14 +20,7 @@ const insertTags = async tags => {
   return newTags;
 };
 
-router.use(cors())
-
-router.use((req, res, next) => {
-  router.use(cors());
-  next();
-});
-
-router.post('/post', async (req, res) => {
+exports.postInsight = async (req, res) => {
   try{
     const insight = await Insight.create(req.body);
 
@@ -42,50 +33,55 @@ router.post('/post', async (req, res) => {
       return res.send({insight});
     }
   }catch(err){
-    return res.status(400).send({ error: 'Falha de inserção do card.' });
+    return res.status(400).send({ error: 'Falha de inserção do insight.' });
   }
-});
+};
 
-router.get('/get', async (req, res) => {
+exports.getInsight = async (req, res) => {
   try{
     if(!req.query.id) {
-      return res.status(400).send({ error: 'ID do card não informado.' });
+      return res.status(400).send({ error: 'ID do insight não informado.' });
     }
 
     const insight = await Insight.findById(req.query.id);
 
     return res.send({ insight });
   }catch(err){
-    return res.status(400).send({ error: 'Falha na leitura do card.' });
+    return res.status(400).send({ error: 'Falha na leitura do insight.' });
   }
-});
+};
 
-router.get('/search', async (req, res) => {
+exports.searchInsight = async (req, res) => {
   try{
-    await Insight.find({
-      texto: {$regex: new RegExp(req.query.s), $options: 'i'}
-    }, (err, insight) => {
-      return res.send({ insight });
-    }).sort({data_criacao: -1}).limit(regsPerPage);
-  }catch(err){
-    return res.status(400).send({ error: 'Falha na listagem de cards.' });
-  }
-});
+    const page = req.query.page || 0;
 
-router.get('/list', async (req, res) => {
+    await Insight.find({ $or: [
+      {texto: {$regex: new RegExp(req.query.s), $options: 'i'}},
+      {'tags.name': req.query.s}
+    ]}).limit(regsPerPage).skip(page * regsPerPage).sort({data_criacao: 'desc'}).exec((err, insight) => {
+      return res.send({ insight });
+    });
+  }catch(err){
+    return res.status(400).send({ error: 'Falha na listagem de insights.' });
+  }
+};
+
+exports.listInsight = async (req, res) => {
   try{
-    await Insight.find({}, (err, insight) => {
-      return res.send({ insight });
-    }).sort({data_criacao: -1}).limit(regsPerPage);
-  }catch(err){
-    return res.status(400).send({ error: 'Falha na listagem de cards.' });
-  }
-});
+    const page = req.query.page || 0;
 
-router.put('/put', async (req, res) => {
+    await Insight.find({}).limit(regsPerPage).skip(page * regsPerPage).sort({data_criacao: 'desc'}).exec((err, insight) => {
+      return res.send({ insight });
+    });
+  }catch(err){
+    return res.status(400).send({ error: 'Falha na listagem de insights.' });
+  }
+};
+
+exports.putInsight = async (req, res) => {
   try{
     if(!req.body.id) {
-      return res.status(400).send({ error: 'ID do card não informado.' });
+      return res.status(400).send({ error: 'ID do insight não informado.' });
     }
 
     const insight = await Insight.findByIdAndUpdate(req.body.id, req.body, {new: true});
@@ -99,22 +95,20 @@ router.put('/put', async (req, res) => {
       return res.send({insight});
     }
   }catch(err){
-    return res.status(400).send({ error: 'Falha de atualização do card.' });
+    return res.status(400).send({ error: 'Falha de atualização do insight.' });
   }
-});
+};
 
-router.delete('/delete', async (req, res) => {
+exports.deleteInsight = async (req, res) => {
   try{
     if(!req.query.id) {
-      return res.status(400).send({ error: 'ID do card não informado.' });
+      return res.status(400).send({ error: 'ID do insight não informado.' });
     }
 
     const insight = await Insight.findByIdAndDelete(req.query.id);
 
     return res.send({ insight });
   }catch(err){
-    return res.status(400).send({ error: 'Falha na remoção do card.' });
+    return res.status(400).send({ error: 'Falha na remoção do insight.' });
   }
-});
-
-module.exports = app => app.use('/insight', router);
+};

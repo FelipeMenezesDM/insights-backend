@@ -12,8 +12,7 @@ Para usar este projeto, é necessário ter instalado em sua máquina:
   ```bash
   git clone https://github.com/FelipeMenezesDM/insights-backend.git
   ```
-1. Acesse a raíz do projeto e entre na pasta "environments".
-1. Copie o arquivo `init.example.js`, alterando o nome da cópia para `init.js`.
+1. Acesse a raíz do projeto e copie o arquivo `.env.example`, alterando o nome da cópia para `.env` e deixando também na raíz do projeto.
 1. Neste arquivo, faça os devidos ajustes na URL de conexão do MongoDB.
 
 Após isso a API estará disponível.
