@@ -53,7 +53,7 @@ const options = {
       }
     }
   },
-  apis: ['src/controllers/insightController.js', 'src/controllers/tagController.js']
+  apis: ['src/routes/insightRouter.js', 'src/routes/tagRouter.js']
 };
 
 const swagger = swaggerJsDoc(options);
